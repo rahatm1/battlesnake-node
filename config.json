@@ -10,7 +10,7 @@
     "snake" : {
         "name": "battlesnake-node",
         "color": "#540f83",
-        "head_url": "https://upload.wikimedia.org/wikipedia/commons/1/1d/Snake.svg",
+        "head_url": "http://i.imgur.com/dlRGQw2.jpg",
         "taunt": {
             "state": "It's great to be alive!",
             "move": "Outta my way snake!",
