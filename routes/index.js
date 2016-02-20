@@ -42,14 +42,10 @@ router.post(config.routes.start, function (req, res) {
     return res.json(data);
 });
 
-<<<<<<< HEAD
-var shortestPath = function(body, target, myHead){
-	// used to find shortest path to a target destination (gold or food)
-=======
 var myHead;
 
-var shortestPath = function(body, food){
->>>>>>> f2fc2997127da8d8f7fa48a3d4f2b80e14b13113
+var shortestPath = function(body, target){
+	// used to find shortest path to a target destination (gold or food)
 	var snakes = body.snakes;
 	var walls = body.walls;
 	console.log("TARGET POS: " + target);
