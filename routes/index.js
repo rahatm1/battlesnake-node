@@ -3,6 +3,22 @@ var express = require('express');
 var router  = express.Router();
 var PF = require('pathfinding');
 
+
+var findDir = function(head, pos) {
+    var xdif = pos[0] - head[0];
+    var ydif = pos[1] - head[1];
+
+    if (xdif === 1) {
+        return 'south';
+    } else if (xdif === -1) {
+        return 'north';
+    } else if (ydif === 1){
+        return 'east';
+    }
+    else{
+        return 'west';
+    }
+};
 // Handle GET request to '/'
 router.get(config.routes.info, function (req, res) {
   // Response data
@@ -30,27 +46,34 @@ router.post(config.routes.start, function (req, res) {
 router.post(config.routes.move, function (req, res) {
   // Do something here to generate your move
     var body = req.body;
-    console.log(JSON.parse(body));
     var snakes = body.snakes;
     var myHead;
-    var food = body.food[0];
-
-    for (var i = 0; i < snakes.length; i++) {
-        if (config.snake.id === snake[i].id) {
-            myHead = snake[i].coords[0];
-        }
-
-    }
+    var food = body.food[1];
+    console.log(food);
 
     var grid = new PF.Grid(body.width, body.height);
 
-    var finder = new PF.AStarFinder(myHead[0], myHead[1], food[0], food[1], grid);
+    for (var i = 0; i < snakes.length; i++) {
+        if (config.snake.id === snakes[i].id) {
+            myHead = snakes[i].coords[0];
+        }
+        for (var j = 0; j < snakes[i].coords.length; j++) {
+            grid.setWalkableAt(snakes[i].coords[j][0], snakes[i].coords[j][1], false);
+        }
+    }
 
-    console.log(matrix);
+    console.log(myHead);
+
+
+    var finder = new PF.AStarFinder();
+
+    var path = finder.findPath(myHead[0], myHead[1], food[0], food[1], grid);
+
+    console.log(path);
 
     // Response data
     var data = {
-        move: 'north', // one of: ["north", "east", "south", "west"]
+        move: findDir(myHead, path[1]), // one of: ["north", "east", "south", "west"]
         taunt: config.snake.taunt.move
     };
 

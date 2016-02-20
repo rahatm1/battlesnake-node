@@ -24,6 +24,6 @@
     "node": "4.x"
   },
   "scripts": {
-    "start": "nf start"
+    "start": "nodemon index.js"
   }
 }

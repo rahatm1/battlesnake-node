@@ -11,7 +11,7 @@ app.set('port', (process.env.PORT || config.port));
 
 app.enable('verbose errors');
 
-app.use(logger('dev'));
+// app.use(logger('dev'));
 app.use(bodyParser.json());
 app.use(routes);
 
