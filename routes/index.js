@@ -43,9 +43,8 @@ router.post(config.routes.end, function (req, res) {
   // Do something here to end your snake's session
 
   // We don't need a response so just send back a 200
-  // res.status(200);
-  // res.end();
-  res.json();
+  res.status(200);
+  res.end();
   return;
 });
 
