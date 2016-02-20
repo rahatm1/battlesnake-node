@@ -42,7 +42,7 @@ router.post(config.routes.start, function (req, res) {
     return res.json(data);
 });
 
-var myHead;
+var mySnake = {};
 
 var shortestPath = function(body, target){
 	// used to find shortest path to a target destination (gold or food)
@@ -56,7 +56,8 @@ var shortestPath = function(body, target){
 
 		// find our snake's head
         if (config.snake.id === snakes[i].id) {
-            myHead = snakes[i].coords[0];
+            mySnake.head = snakes[i].coords[0];
+			mySnake.health = snakes[i].health;
         }
 
 		// set unwalkable squares - snake's tails
@@ -74,7 +75,7 @@ var shortestPath = function(body, target){
 
 	// use A* algorithm to find the shortest path to target item
     var finder = new PF.AStarFinder();
-    var path = finder.findPath(myHead[0], myHead[1], target[0], target[1], grid);
+    var path = finder.findPath(mySnake.head[0], mySnake.head[1], target[0], target[1], grid);
 
     console.log("Current Path:");
     console.log(path);
@@ -103,7 +104,7 @@ router.post(config.routes.move, function (req, res) {
 	var foodPath;
 
 	for(var i = 0; i < foodArray.length; i++){
-		var path = shortestPath(body, foodArray[i], myHead);
+		var path = shortestPath(body, foodArray[i], mySnake.head);
 		if(foodPath === undefined) foodPath = path;
 		else{
 			if(path.length < foodPath.length){
@@ -120,7 +121,7 @@ router.post(config.routes.move, function (req, res) {
 	if(goldArray){
 		// run shortest path, for gold this time
 		for(var i = 0; i < goldArray.length; i++){
-			var path = shortestPath(body, goldArray[i], myHead);
+			var path = shortestPath(body, goldArray[i], mySnake.head);
 			if(goldPath === undefined) goldPath = path;
 			else{
 				if(path.length < goldPath.length){
@@ -133,17 +134,17 @@ router.post(config.routes.move, function (req, res) {
 	// strategy question: when should we prioritize gold over food?
 	// right now, do: if health is low (under 20), go for food. Else, go for gold.
 	var bestPath = foodPath;
-	if(goldPath && config.snake.health > 20){
+	if(goldPath && mySnake.health > 20){
 		bestPath = goldPath;
 	}
 	
 	console.log(bestPath);
-    console.log(myHead);
+    console.log(mySnake.head);
 
-	console.log("DIR: " + findDir(myHead, bestPath[1]));
+	console.log("DIR: " + findDir(mySnake.head, bestPath[1]));
     // Response data
     var data = {
-        move: findDir(myHead, bestPath[1]), // one of: ["north", "east", "south", "west"]
+        move: findDir(mySnake.head, bestPath[1]), // one of: ["north", "east", "south", "west"]
         taunt: config.snake.taunt.move
     };
 
