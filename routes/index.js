@@ -15,7 +15,7 @@ var findDir = function(head, pos) {
     } else if (ydif === 1){
         return 'south';
     }
-    else{
+    else if (ydif === -1){
         return 'north';
     }
 };
@@ -47,37 +47,37 @@ var shortestPath = function(body, food, myHead){
 	console.log("FOOD POS: " + food);
 
     var grid = new PF.Grid(body.width, body.height);
-	
+
     for (var i = 0; i < snakes.length; i++) {
-		
+
 		// find our snake's head
         if (config.snake.id === snakes[i].id) {
             myHead = snakes[i].coords[0];
         }
-		
+
 		// set unwalkable squares
         for (var j = 0; j < snakes[i].coords.length; j++) {
             grid.setWalkableAt(snakes[i].coords[j][0], snakes[i].coords[j][1], false);
         }
     }
-	
+
 	// use A* algorithm to find the shortest path to food
     var finder = new PF.AStarFinder();
     var path = finder.findPath(myHead[0], myHead[1], food[0], food[1], grid);
-	
+
 	return path;
-}
+};
 
 // Handle POST request to '/move'
 router.post(config.routes.move, function (req, res) {
   // Do something here to generate your move
     var body = req.body;
 	var myHead;
-	
+
 	// find closest food
     var foodArray = body.food;
 	var bestPath;
-	
+
 	for(var i = 0; i < foodArray.length; i++){
 		path = shortestPath(body, food[i], myHead);
 		if(bestPath === undefined) bestPath = path;
@@ -88,7 +88,7 @@ router.post(config.routes.move, function (req, res) {
 		}
 	}
 	//now, bestPath should be the shortest path to food on the grid.
-    
+
 	console.log("DIR: " + findDir(myHead, path[1]));
     // Response data
     var data = {
