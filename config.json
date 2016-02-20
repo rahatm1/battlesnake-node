@@ -9,8 +9,8 @@
   },
   "snake" : {
     "name": "battlesnake-node",
-    "color": "#fff000",
-    "head_url": "http://battlesnake-node.herokuapp.com/",
+    "color": "#540f83",
+    "head_url": "https://upload.wikimedia.org/wikipedia/commons/1/1d/Snake.svg",
     "taunt": {
       "state": "It's great to be alive!",
       "move": "Outta my way snake!",
