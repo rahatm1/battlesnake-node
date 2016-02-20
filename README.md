@@ -33,7 +33,7 @@ Run the server:
 npm start
 ```
 
-Test the client in your browser: [http://localhost:9001](http://localhost:5000)
+Test the client in your browser: [http://localhost:5000](http://localhost:5000)
 
 
 ### Deploying to Heroku
