@@ -103,8 +103,8 @@ router.post(config.routes.move, function (req, res) {
 	var foodPath;
 
 	for(var i = 0; i < foodArray.length; i++){
-		var path = shortestPath(body, food[i], myHead);
-		if(foodPath === undefined) bestPath = path;
+		var path = shortestPath(body, foodArray[i], myHead);
+		if(foodPath === undefined) foodPath = path;
 		else{
 			if(path.length < foodPath.length){
 				foodPath = path;
@@ -120,7 +120,7 @@ router.post(config.routes.move, function (req, res) {
 	if(goldArray){
 		// run shortest path, for gold this time
 		for(var i = 0; i < goldArray.length; i++){
-			var path = shortestPath(body, gold[i], myHead);
+			var path = shortestPath(body, goldArray[i], myHead);
 			if(goldPath === undefined) goldPath = path;
 			else{
 				if(path.length < goldPath.length){
@@ -136,7 +136,7 @@ router.post(config.routes.move, function (req, res) {
 	if(goldPath && config.snake.health > 20){
 		bestPath = goldPath;
 	}
-
+	
 	console.log(bestPath);
     console.log(myHead);
 
