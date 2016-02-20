@@ -42,8 +42,14 @@ router.post(config.routes.start, function (req, res) {
     return res.json(data);
 });
 
+<<<<<<< HEAD
 var shortestPath = function(body, target, myHead){
 	// used to find shortest path to a target destination (gold or food)
+=======
+var myHead;
+
+var shortestPath = function(body, food){
+>>>>>>> f2fc2997127da8d8f7fa48a3d4f2b80e14b13113
 	var snakes = body.snakes;
 	var walls = body.walls;
 	console.log("TARGET POS: " + target);
@@ -74,6 +80,8 @@ var shortestPath = function(body, target, myHead){
     var finder = new PF.AStarFinder();
     var path = finder.findPath(myHead[0], myHead[1], target[0], target[1], grid);
 
+    console.log("Current Path:");
+    console.log(path);
 	return path;
 };
 
@@ -81,10 +89,21 @@ var shortestPath = function(body, target, myHead){
 router.post(config.routes.move, function (req, res) {
   // Do something here to generate your move
     var body = req.body;
-	var myHead;
+    var direction;
 
 	// find closest food
     var foodArray = body.food;
+	console.log(foodArray);
+    var dirArray = ['north', 'south', 'east', 'west'];
+
+    if (!foodArray) {
+        console.log("No Food");
+        direction = dirArray[(Math.floor(Math.random()*100)%4)];
+        return res.json({
+            move: direction
+        });
+    }
+
 	var foodPath;
 
 	for(var i = 0; i < foodArray.length; i++){
@@ -96,8 +115,8 @@ router.post(config.routes.move, function (req, res) {
 			}
 		}
 	}
-	//now, bestPath should be the shortest path to food on the grid.
-	
+	//now, foodPath should be the shortest path to food on the grid.
+
 	//check for gold:
 	var goldArray = body.gold;
 	var goldPath;
@@ -121,7 +140,10 @@ router.post(config.routes.move, function (req, res) {
 	if(goldPath && config.snake.health > 20){
 		bestPath = goldPath;
 	}
-	
+
+	console.log(bestPath);
+    console.log(myHead);
+
 	console.log("DIR: " + findDir(myHead, bestPath[1]));
     // Response data
     var data = {
