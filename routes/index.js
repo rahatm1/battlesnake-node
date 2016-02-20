@@ -89,10 +89,10 @@ router.post(config.routes.move, function (req, res) {
 	}
 	//now, bestPath should be the shortest path to food on the grid.
 
-	console.log("DIR: " + findDir(myHead, path[1]));
+	console.log("DIR: " + findDir(myHead, bestPath[1]));
     // Response data
     var data = {
-        move: findDir(myHead, path[1]), // one of: ["north", "east", "south", "west"]
+        move: findDir(myHead, bestPath[1]), // one of: ["north", "east", "south", "west"]
         taunt: config.snake.taunt.move
     };
 
