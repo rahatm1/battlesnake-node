@@ -49,7 +49,7 @@ router.post(config.routes.move, function (req, res) {
     var snakes = body.snakes;
     var myHead;
     var food = body.food[1];
-    console.log(food);
+    console.log("FOOD POS: " + food);
 
     var grid = new PF.Grid(body.width, body.height);
 
@@ -62,15 +62,15 @@ router.post(config.routes.move, function (req, res) {
         }
     }
 
-    console.log(myHead);
+    console.log("HEAD POS: " + myHead);
 
 
     var finder = new PF.AStarFinder();
 
     var path = finder.findPath(myHead[0], myHead[1], food[0], food[1], grid);
 
-    console.log(path);
-
+    console.log("PATH POS: " + path[1]);
+    console.log("DIR: " + findDir(myHead, path[1]));
     // Response data
     var data = {
         move: findDir(myHead, path[1]), // one of: ["north", "east", "south", "west"]
