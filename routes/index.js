@@ -9,14 +9,14 @@ var findDir = function(head, pos) {
     var ydif = pos[1] - head[1];
 
     if (xdif === 1) {
-        return 'south';
-    } else if (xdif === -1) {
-        return 'north';
-    } else if (ydif === 1){
         return 'east';
+    } else if (xdif === -1) {
+        return 'west';
+    } else if (ydif === 1){
+        return 'south';
     }
     else{
-        return 'west';
+        return 'north';
     }
 };
 // Handle GET request to '/'
