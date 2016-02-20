@@ -42,7 +42,9 @@ router.post(config.routes.start, function (req, res) {
     return res.json(data);
 });
 
-var shortestPath = function(body, food, myHead){
+var myHead;
+
+var shortestPath = function(body, food){
 	var snakes = body.snakes;
 	console.log("FOOD POS: " + food);
 
@@ -72,14 +74,22 @@ var shortestPath = function(body, food, myHead){
 router.post(config.routes.move, function (req, res) {
   // Do something here to generate your move
     var body = req.body;
-	var myHead;
 
 	// find closest food
     var foodArray = body.food;
+    var dirArray = ['north', 'south', 'east', 'west'];
+
+    if (!foodArray) {
+        direction = dirArray[(Math.floor(Math.random()*100)%4)];
+        return res.json({
+            move: direction
+        });
+    }
+
 	var bestPath;
 
 	for(var i = 0; i < foodArray.length; i++){
-		path = shortestPath(body, food[i], myHead);
+		path = shortestPath(body, food[i]);
 		if(bestPath === undefined) bestPath = path;
 		else{
 			if(path.length < bestPath.length){
@@ -88,6 +98,7 @@ router.post(config.routes.move, function (req, res) {
 		}
 	}
 	//now, bestPath should be the shortest path to food on the grid.
+    console.log(myHead);
 
 	console.log("DIR: " + findDir(myHead, bestPath[1]));
     // Response data
