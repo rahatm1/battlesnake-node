@@ -15,7 +15,7 @@ var findDir = function(head, pos) {
     } else if (ydif === 1){
         return 'east';
     }
-    else{
+    else if (ydif === -1) {
         return 'west';
     }
 };
@@ -70,10 +70,20 @@ router.post(config.routes.move, function (req, res) {
     var path = finder.findPath(myHead[0], myHead[1], food[0], food[1], grid);
 
     console.log("PATH POS: " + path[1]);
-    console.log("DIR: " + findDir(myHead, path[1]));
+    var direction;
+    direction = findDir(myHead, path[1]);
+
+    var dirArray = ['east', 'west', 'north', 'south'];
+
+    if (direction === undefined) {
+        direction = dirArray[Math.floor(Math.Random()*100) % 4];
+        console.log("RANDOM DIRECTIONT TAKEN");
+    }
+
+    console.log("DIR: " + direction);
     // Response data
     var data = {
-        move: findDir(myHead, path[1]), // one of: ["north", "east", "south", "west"]
+        move: direction, // one of: ["north", "east", "south", "west"]
         taunt: config.snake.taunt.move
     };
 
