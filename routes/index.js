@@ -67,6 +67,8 @@ var shortestPath = function(body, food){
     var finder = new PF.AStarFinder();
     var path = finder.findPath(myHead[0], myHead[1], food[0], food[1], grid);
 
+    console.log("Current Path:");
+    console.log(path);
 	return path;
 };
 
@@ -74,12 +76,15 @@ var shortestPath = function(body, food){
 router.post(config.routes.move, function (req, res) {
   // Do something here to generate your move
     var body = req.body;
+    var direction;
 
 	// find closest food
     var foodArray = body.food;
+    console.log(foodArray);
     var dirArray = ['north', 'south', 'east', 'west'];
 
     if (!foodArray) {
+        console.log("No Food");
         direction = dirArray[(Math.floor(Math.random()*100)%4)];
         return res.json({
             move: direction
@@ -89,15 +94,20 @@ router.post(config.routes.move, function (req, res) {
 	var bestPath;
 
 	for(var i = 0; i < foodArray.length; i++){
-		path = shortestPath(body, food[i]);
-		if(bestPath === undefined) bestPath = path;
-		else{
+		var path = shortestPath(body, foodArray[i]);
+
+		if(!bestPath){
+            console.log("First Path");
+            bestPath = path;
+        }
+		else {
 			if(path.length < bestPath.length){
 				bestPath = path;
 			}
 		}
 	}
 	//now, bestPath should be the shortest path to food on the grid.
+	console.log(bestPath);
     console.log(myHead);
 
 	console.log("DIR: " + findDir(myHead, bestPath[1]));
