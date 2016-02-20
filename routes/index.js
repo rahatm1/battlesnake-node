@@ -9,14 +9,14 @@ var findDir = function(head, pos) {
     var ydif = pos[1] - head[1];
 
     if (xdif === 1) {
-        return 'south';
-    } else if (xdif === -1) {
-        return 'north';
-    } else if (ydif === 1){
         return 'east';
+    } else if (xdif === -1) {
+        return 'west';
+    } else if (ydif === 1){
+        return 'south';
     }
     else{
-        return 'west';
+        return 'north';
     }
 };
 // Handle GET request to '/'
@@ -42,35 +42,54 @@ router.post(config.routes.start, function (req, res) {
     return res.json(data);
 });
 
-// Handle POST request to '/move'
-router.post(config.routes.move, function (req, res) {
-  // Do something here to generate your move
-    var body = req.body;
-    var snakes = body.snakes;
-    var myHead;
-    var food = body.food[1];
-    console.log("FOOD POS: " + food);
+var shortestPath = function(body, food, myHead){
+	var snakes = body.snakes;
+	console.log("FOOD POS: " + food);
 
     var grid = new PF.Grid(body.width, body.height);
-
+	
     for (var i = 0; i < snakes.length; i++) {
+		
+		// find our snake's head
         if (config.snake.id === snakes[i].id) {
             myHead = snakes[i].coords[0];
         }
+		
+		// set unwalkable squares
         for (var j = 0; j < snakes[i].coords.length; j++) {
             grid.setWalkableAt(snakes[i].coords[j][0], snakes[i].coords[j][1], false);
         }
     }
-
-    console.log("HEAD POS: " + myHead);
-
-
+	
+	// use A* algorithm to find the shortest path to food
     var finder = new PF.AStarFinder();
-
     var path = finder.findPath(myHead[0], myHead[1], food[0], food[1], grid);
+	
+	return path;
+}
 
-    console.log("PATH POS: " + path[1]);
-    console.log("DIR: " + findDir(myHead, path[1]));
+// Handle POST request to '/move'
+router.post(config.routes.move, function (req, res) {
+  // Do something here to generate your move
+    var body = req.body;
+	var myHead;
+	
+	// find closest food
+    var foodArray = body.food;
+	var bestPath;
+	
+	for(var i = 0; i < foodArray.length; i++){
+		path = shortestPath(body, food[i], myHead);
+		if(bestPath === undefined) bestPath = path;
+		else{
+			if(path.length < bestPath.length){
+				bestPath = path;
+			}
+		}
+	}
+	//now, bestPath should be the shortest path to food on the grid.
+    
+	console.log("DIR: " + findDir(myHead, path[1]));
     // Response data
     var data = {
         move: findDir(myHead, path[1]), // one of: ["north", "east", "south", "west"]
