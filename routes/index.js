@@ -138,6 +138,7 @@ router.post(config.routes.move, function (req, res) {
 	var bestPath;
     var bestPathArray = findBestPathWrapper(foodArray,body);
     var bestPathPos = 0;
+    var posChanged = false;
 
     for(var i = 0; i < bestPathArray.length; i++){
 
@@ -149,8 +150,12 @@ router.post(config.routes.move, function (req, res) {
             if(distance <= bestPathArray[i].length){
                 //TODO: eat snake
                 bestPathPos++;
+                posChanged = true;
                 break;
             }
+        }
+        if (!posChanged) {
+            break;
         }
     }
     console.log(bestPathPos);
