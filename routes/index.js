@@ -204,7 +204,7 @@ router.post(config.routes.move, function (req, res) {
     if(bestPathPos>=bestPathArray.length){
         console.log("safe");
         return res.json({
-            move: safe()
+            move: safe(body)
         });
     }
 
