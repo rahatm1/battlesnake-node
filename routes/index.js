@@ -137,7 +137,7 @@ router.post(config.routes.move, function (req, res) {
 	// right now, do: if health is low (under 20), go for food. Else, go for gold.
 	var bestPath = foodPath;
 	if(goldPath){
-		if(mySnake.health > 20 && goldPath.length < foodPath.length{
+		if(mySnake.health > 20 && goldPath.length < foodPath.length){
 			bestPath = goldPath;
 		}
 	}
