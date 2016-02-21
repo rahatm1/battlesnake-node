@@ -141,7 +141,8 @@ router.post(config.routes.move, function (req, res) {
 
     for(var i = 0; i < bestPathArray.length; i++){
 
-        for(var snakehead in snakeHeadList){
+        for (var j = 0; j < snakeHeadList.length; j++) {
+            var snakehead = snakeHeadList[j];
             console.log(snakehead);
             //distance between enemy snake to current best food
             var distance = findDist(snakehead, bestPathArray[i][bestPathArray[i].length -1]);
