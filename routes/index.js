@@ -144,15 +144,14 @@ var safe = function(body) {
     var gridWest = grid.clone();
     var finder = new PF.AStarFinder();
     var path = finder.findPath(myHead[0], myHead[1], myHead[0]+1, myHead[1], gridEast);
-    if(path) direction = 'east';
+    if(path.length > 0) direction = 'east';
     path = finder.findPath(myHead[0], myHead[1], myHead[0]-1, myHead[1], gridWest);
-    if(path) direction = 'west';
+    if(path.length) direction = 'west';
     path = finder.findPath(myHead[0], myHead[1], myHead[0], myHead[1]+1, gridNorth);
-    if(path) direction = 'north';
+    if(path.length) direction = 'north';
     path = finder.findPath(myHead[0], myHead[1], myHead[0], myHead[1]-1, gridSouth);
-    if(path) direction = 'south';
+    if(path.length) direction = 'south';
 
-    console.log(path);
     return direction;
 };
 
