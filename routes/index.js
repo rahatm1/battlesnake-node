@@ -67,9 +67,11 @@ var shortestPath = function(body, target){
     }
 	
 	// set unwalkable squares - walls
-	for (i = 0; i < walls.length; i++) {
-		for (var j = 0; j < walls[i].coords.length; j++) {
-			grid.setWalkableAt(walls[i].coords[j][0], walls[i].coords[j][1], false);
+	if(walls){
+		for (i = 0; i < walls.length; i++) {
+			for (var j = 0; j < walls[i].coords.length; j++) {
+				grid.setWalkableAt(walls[i].coords[j][0], walls[i].coords[j][1], false);
+			}
 		}
 	}
 
