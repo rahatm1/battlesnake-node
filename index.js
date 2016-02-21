@@ -11,7 +11,7 @@ app.set('port', (process.env.PORT || config.port));
 
 app.enable('verbose errors');
 
-// app.use(logger('dev'));
+app.use(logger('dev'));
 app.use(bodyParser.json());
 app.use(routes);
 
@@ -51,6 +51,7 @@ app.use(function (err, req, res, next) {
 app.use(function (err, req, res, next) {
   var statusCode = err.status || 500;
 
+  console.log(err.stack);
   res.status(statusCode);
   res.send({
     status: statusCode,

@@ -76,9 +76,7 @@ var shortestPath = function(body, food){
 //returns best path
 var findBestPathWrapper = function(foodArray, body){
 
-    var pathObject; 
-    var bestPathArray;
-    var bestPath;
+    var bestPathArray = [];
 
     for(var i = 0; i < foodArray.length; i++){
         var path = shortestPath(body, foodArray[i]);
@@ -90,23 +88,19 @@ var findBestPathWrapper = function(foodArray, body){
         return (a.length - b.length);
     });
 
-    pathObject.bestPathArray = bestPathArray;
-
-    if(bestPathArray.length > 0){
-        pathObject.bestPath = bestPathArray[0];
-    } 
-
-    return pathObject;
-}
+    return bestPathArray;
+};
 
 var findSnakeHeads = function(snakeList){
+    console.log(snakeList);
+    var snakeHeads = [];
 
-    var snakeHeads = []; 
-
-    for (var snake in snakeList){
+    for (var i = 0; i < snakeList.length; i++) {
+        var snake = snakeList[i];
                     // find our snake's head
-        if (config.snake.id === snakes[i].id) {
-            continue;  
+        console.log("snake :" + snake);
+        if (config.snake.id === snake.id) {
+            continue;
         }
 
         snakeHeads.push(snake.coords[0]);
@@ -114,21 +108,20 @@ var findSnakeHeads = function(snakeList){
     }
 
     return snakeHeads;
-}
+};
 
 
 var findDist = function(pos1, pos2){
 
     return ( Math.abs(pos1[0]-pos2[0]) + Math.abs(pos1[1]-pos2[1]) );
-}
+};
 
 // Handle POST request to '/move'
 router.post(config.routes.move, function (req, res) {
   // Do something here to generate your move
     var body = req.body;
     var direction;
-    var snakeHeadList = findSnakeHeads(body.snakes); 
-    var main_grid = new PF.Grid(body.width, body.height);
+    var snakeHeadList = findSnakeHeads(body.snakes);
 
 	// find closest food
     var foodArray = body.food;
@@ -145,34 +138,31 @@ router.post(config.routes.move, function (req, res) {
     }
 
 	var bestPath;
-    var pathObjectContainer;
-    var bestPathArray = pathObjectContainer.bestPathArray;
-
-    pathObjectContainer = findBestPathWrapper(foodArray,body);
+    var bestPathArray = findBestPathWrapper(foodArray,body);
     var bestPathPos = 0;
 
     for(var i = 0; i < bestPathArray.length; i++){
-    
-        for(snakehead in snakeHeadList){
+
+        for(var snakehead in snakeHeadList){
             //distance between enemy snake to current best food
             var distance = findDist(snakehead, bestPathArray[i][bestPathArray[i].length -1]);
             if(distance <= bestPathArray[i].length){
-                //TODO: eat snake 
+                //TODO: eat snake
                 bestPathPos++;
                 break;
             }
         }
     }
 
-    if(bestPathPos>bestPathArray.length){
-        //get random safe dir
+    if(bestPathPos>=bestPathArray.length){
+        //TODO:get random safe dir
         console.log("safe");
     }
 
     else {
        bestPath = bestPathArray[bestPathPos];
     }
- 
+
 	//now, bestPath should be the shortest path to food on the grid.
 	console.log(bestPath);
     console.log(myHead);
