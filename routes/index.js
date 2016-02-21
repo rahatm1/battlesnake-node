@@ -50,7 +50,7 @@ var shortestPath = function(body, target){
 	var walls = body.walls;
 	console.log("TARGET POS: " + target);
 
-    var grid = new PF.Grid(body.width, body.height);
+    var grid = new PF.Grid(body.width-1, body.height-1);
 
     for (var i = 0; i < snakes.length; i++) {
 
@@ -137,7 +137,7 @@ router.post(config.routes.move, function (req, res) {
 	// right now, do: if health is low (under 20), go for food. Else, go for gold.
 	var bestPath = foodPath;
 	if(goldPath){
-		if(mySnake.health > 20 && goldPath.length < foodPath.length){
+		if(mySnake.health > 20 && goldPath.length <= foodPath.length){
 			bestPath = goldPath;
 		}
 	}
