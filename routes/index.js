@@ -50,7 +50,7 @@ var shortestPath = function(body, target){
 	var walls = body.walls;
 	console.log("TARGET POS: " + target);
 
-    var grid = new PF.Grid(body.width-1, body.height-1);
+    var grid = new PF.Grid(body.width, body.height);
 
     for (var i = 0; i < snakes.length; i++) {
 
