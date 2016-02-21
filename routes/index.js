@@ -147,7 +147,7 @@ router.post(config.routes.move, function (req, res) {
     // Response data
     var data = {
         move: findDir(mySnake.head, bestPath[1]), // one of: ["north", "east", "south", "west"]
-        taunt: config.snake.taunt.move
+        taunt: config.snake.taunt.move[Math.floor(Math.random()*100)%7]; //choose random taunt of 8 preset taunts
     };
 
     return res.json(data);

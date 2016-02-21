@@ -13,10 +13,16 @@
         "color": "#540f83",
         "head_url": "http://i.imgur.com/dlRGQw2.jpg",
         "taunt": {
-            "state": "It's great to be alive!",
-            "move": "Outta my way snake!",
-            "start": "Let's do this thang!",
-            "end": "I've been snaked!"
+            "state": "HE WHO CONTROLS THE BATTLEFIELD, CONTROLS HISTORY.",
+            "move": ["UNFORTUNATELY, KILLING IS ONE OF THOSE THINGS THAT GETS EASIER THE MORE YOU DO IT.",
+					 "I’M JUST A MAN WHO’S GOOD AT WHAT HE DOES. KILLING.",
+					 "WAR HAS CHANGED.",
+					 "IT’S EASY TO FORGET WHAT A SIN IS IN THE MIDDLE OF A BATTLEFIELD.",
+					 "I’VE NEVER FOUGHT FOR ANYONE BUT MYSELF.",
+					 "IF YOU ASK ME, THERE'S NO HAPPINESS TO BE FOUND IN DEATH... NO PEACE EITHER. I'M LEAVING HERE ALIVE.",
+					 "I’M A SHADOW, ONE THAT NO LIGHT WILL SHINE ON. AS LONG AS YOU FOLLOW ME, YOU WILL NEVER SEE THE DAY."],
+            "start": "A STRONG MAN DOESN’T NEED TO READ THE FUTURE. HE MAKES HIS OWN.",
+            "end": "IF YOU ASK ME, THERE'S NO HAPPINESS TO BE FOUND IN DEATH... NO PEACE EITHER."
         }
     }
 }
