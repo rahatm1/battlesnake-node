@@ -92,13 +92,11 @@ var findBestPathWrapper = function(foodArray, body){
 };
 
 var findSnakeHeads = function(snakeList){
-    console.log(snakeList);
     var snakeHeads = [];
 
     for (var i = 0; i < snakeList.length; i++) {
         var snake = snakeList[i];
                     // find our snake's head
-        console.log("snake :" + snake);
         if (config.snake.id === snake.id) {
             continue;
         }
@@ -153,7 +151,8 @@ router.post(config.routes.move, function (req, res) {
             }
         }
     }
-
+    console.log(bestPathPos);
+    
     if(bestPathPos>=bestPathArray.length){
         //TODO:get random safe dir
         console.log("safe");
