@@ -142,6 +142,7 @@ router.post(config.routes.move, function (req, res) {
     for(var i = 0; i < bestPathArray.length; i++){
 
         for(var snakehead in snakeHeadList){
+            console.log(snakehead);
             //distance between enemy snake to current best food
             var distance = findDist(snakehead, bestPathArray[i][bestPathArray[i].length -1]);
             if(distance <= bestPathArray[i].length){
@@ -152,7 +153,7 @@ router.post(config.routes.move, function (req, res) {
         }
     }
     console.log(bestPathPos);
-    
+
     if(bestPathPos>=bestPathArray.length){
         //TODO:get random safe dir
         console.log("safe");
