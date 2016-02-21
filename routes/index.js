@@ -114,6 +114,12 @@ var findDist = function(pos1, pos2){
     return ( Math.abs(pos1[0]-pos2[0]) + Math.abs(pos1[1]-pos2[1]) );
 };
 
+var safe = function() {
+    var dirArray = ['north', 'south', 'east', 'west'];
+    direction = dirArray[(Math.floor(Math.random()*100)%4)];
+    return direction;
+};
+
 // Handle POST request to '/move'
 router.post(config.routes.move, function (req, res) {
   // Do something here to generate your move
@@ -125,13 +131,10 @@ router.post(config.routes.move, function (req, res) {
     var foodArray = body.food;
     console.log(foodArray);
 
-    var dirArray = ['north', 'south', 'east', 'west'];
-
     if (!foodArray) {
         console.log("No Food");
-        direction = dirArray[(Math.floor(Math.random()*100)%4)];
         return res.json({
-            move: direction
+            move: safe()
         });
     }
 
@@ -161,8 +164,10 @@ router.post(config.routes.move, function (req, res) {
     console.log(bestPathPos);
 
     if(bestPathPos>=bestPathArray.length){
-        //TODO:get random safe dir
         console.log("safe");
+        return res.json({
+            move: safe()
+        });
     }
 
     else {
