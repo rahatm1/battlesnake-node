@@ -66,7 +66,7 @@ var shortestPath = function(body, target){
             grid.setWalkableAt(snakes[i].coords[j][0], snakes[i].coords[j][1], false);
         }
     }
-	
+
 	// set unwalkable squares - walls
 	if(walls){
 		for (var i = 0; i < walls.length; i++) {
@@ -126,44 +126,6 @@ var findDist = function(pos1, pos2){
     return ( Math.abs(pos1[0]-pos2[0]) + Math.abs(pos1[1]-pos2[1]) );
 };
 
-var safe = function(body) {
-    //pick safe block
-
-    var snakes = body.snakes;
-    var grid = new PF.Grid(body.width, body.height);
-    var backupGrid = grid.clone();
-    var direction;
-
-    for (var i = 0; i < snakes.length; i++) {
-
-        // find our snake's head
-        if (config.snake.id === snakes[i].id) {
-            myHead = snakes[i].coords[0];
-        }
-
-        // set unwalkable squares
-        for (var j = 0; j < snakes[i].coords.length; j++) {
-            grid.setWalkableAt(snakes[i].coords[j][0], snakes[i].coords[j][1], false);
-        }
-    }
-
-    // use A* algorithm to find the shortest path to food
-    var gridNorth = grid.clone();
-    var gridSouth = grid.clone();
-    var gridEast = grid.clone();
-    var gridWest = grid.clone();
-    var finder = new PF.AStarFinder();
-    var path = finder.findPath(myHead[0], myHead[1], myHead[0]+1, myHead[1], gridEast);
-    if(path.length > 0) direction = 'east';
-    path = finder.findPath(myHead[0], myHead[1], myHead[0]-1, myHead[1], gridWest);
-    if(path.length) direction = 'west';
-    path = finder.findPath(myHead[0], myHead[1], myHead[0], myHead[1]+1, gridNorth);
-    if(path.length) direction = 'north';
-    path = finder.findPath(myHead[0], myHead[1], myHead[0], myHead[1]-1, gridSouth);
-    if(path.length) direction = 'south';
-
-    return direction;
-};
 
 // Handle POST request to '/move'
 router.post(config.routes.move, function (req, res) {
@@ -179,9 +141,9 @@ router.post(config.routes.move, function (req, res) {
 
     if (!foodArray) {
         console.log("No Food");
-        return res.json({
-            move: safe(body)
-        });
+        res.status(500);
+        res.end();
+        return;
     }
 
 	var foodPath;
@@ -200,7 +162,7 @@ router.post(config.routes.move, function (req, res) {
 	//check for gold:
 	var goldArray = body.gold;
 	var goldPath;
-	
+
 	if(goldArray){
 		// run shortest path, for gold this time
 		for(var i = 0; i < goldArray.length; i++){
@@ -213,7 +175,7 @@ router.post(config.routes.move, function (req, res) {
 			}
 		}
 	}
-	
+
 	// strategy question: when should we prioritize gold over food?
 	// right now, do: if health is low (under 20), go for food. Else, go for gold.
 	var bestPath = foodPath;
@@ -222,20 +184,20 @@ router.post(config.routes.move, function (req, res) {
 			bestPath = goldPath;
 		}
 	}
-	
+
 	var bestPath;
     var bestPathArray = findBestPathWrapper(foodArray,body);
     var bestPathPos = 0;
     var posChanged = false;
-	
+
 	//now, bestPath should be the shortest path to food on the grid.
-	
+
 	//check for gold:
 	var goldArray = body.gold;
 	if(goldArray){
 		var goldPathArray = findBestPathWrapper(goldArray,body);
 	}
-	
+
 	if(goldPathArray){
 		bestPathArray = bestPathArray.concat(goldPathArray);
 		bestPathArray = bestPathArray.sort(function(a,b){
@@ -265,15 +227,15 @@ router.post(config.routes.move, function (req, res) {
 
     if(bestPathPos>=bestPathArray.length){
         console.log("safe");
-        return res.json({
-            move: safe(body)
-        });
+        res.status(500);
+        res.end();
+        return;
     }
 
     else {
        bestPath = bestPathArray[bestPathPos];
     }
-	
+
     // Response data
     var data = {
         move: findDir(mySnake.head, bestPath[1]), // one of: ["north", "east", "south", "west"]
