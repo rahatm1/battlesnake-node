@@ -136,8 +136,10 @@ router.post(config.routes.move, function (req, res) {
 	// strategy question: when should we prioritize gold over food?
 	// right now, do: if health is low (under 20), go for food. Else, go for gold.
 	var bestPath = foodPath;
-	if(goldPath && mySnake.health > 20){
-		bestPath = goldPath;
+	if(goldPath){
+		if(mySnake.health > 20 && goldPath.length < foodPath.length{
+			bestPath = goldPath;
+		}
 	}
 	
 	console.log(bestPath);
