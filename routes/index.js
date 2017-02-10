@@ -3,7 +3,7 @@ var express = require('express');
 var router  = express.Router();
 var PF = require('pathfinding');
 
-
+//TODO: check this
 var findDir = function(head, pos) {
     var xdif = pos[0] - head[0];
     var ydif = pos[1] - head[1];
@@ -19,7 +19,7 @@ var findDir = function(head, pos) {
         return 'north';
     }
 };
-// Handle GET request to '/'
+
 router.get(config.routes.info, function (req, res) {
   // Response data
     var data = {
@@ -30,11 +30,7 @@ router.get(config.routes.info, function (req, res) {
     return res.json(data);
 });
 
-// Handle POST request to '/start'
 router.post(config.routes.start, function (req, res) {
-  // Do something here to start the game
-
-  // Response data
     var data = {
         taunt: config.snake.taunt.start
     };
@@ -47,9 +43,10 @@ var mySnake = {};
 var shortestPath = function(body, target){
 	// used to find shortest path to a target destination (gold or food)
 	var snakes = body.snakes;
-	var walls = body.walls;
 	console.log("TARGET POS: " + target);
 
+    //TODO: Why were we creating a new grid everytime?
+    // Does A* destroy the grid to do the math?
     var grid = new PF.Grid(body.width, body.height);
 
     for (var i = 0; i < snakes.length; i++) {
@@ -65,15 +62,7 @@ var shortestPath = function(body, target){
             grid.setWalkableAt(snakes[i].coords[j][0], snakes[i].coords[j][1], false);
         }
     }
-	
-	// set unwalkable squares - walls
-	if(walls){
-		for (var i = 0; i < walls.length; i++) {
-			grid.setWalkableAt(walls[i][0], walls[i][1], false);
-		}
-	}
 
-	// use A* algorithm to find the shortest path to target item
     var finder = new PF.AStarFinder();
     var path = finder.findPath(mySnake.head[0], mySnake.head[1], target[0], target[1], grid);
 
@@ -84,7 +73,6 @@ var shortestPath = function(body, target){
 
 // Handle POST request to '/move'
 router.post(config.routes.move, function (req, res) {
-  // Do something here to generate your move
     var body = req.body;
     var direction;
 
@@ -93,6 +81,8 @@ router.post(config.routes.move, function (req, res) {
 	console.log(foodArray);
     var dirArray = ['north', 'south', 'east', 'west'];
 
+    // TODO: This is where we screwed up last time
+    // if there's no food, follow own tail. NOT RANDOM!!!
     if (!foodArray) {
         console.log("No Food");
         direction = dirArray[(Math.floor(Math.random()*100)%4)];
@@ -105,41 +95,15 @@ router.post(config.routes.move, function (req, res) {
 
 	for(var i = 0; i < foodArray.length; i++){
 		var path = shortestPath(body, foodArray[i], mySnake.head);
-		if(foodPath === undefined) foodPath = path;
-		else{
-			if(path.length < foodPath.length){
+        if (foodPath === undefined) {
+            foodPath = path;
+        } else if (path.length < foodPath.length) {
 				foodPath = path;
-			}
 		}
 	}
-	//now, foodPath should be the shortest path to food on the grid.
 
-	//check for gold:
-	var goldArray = body.gold;
-	var goldPath;
-	
-	if(goldArray){
-		// run shortest path, for gold this time
-		for(var i = 0; i < goldArray.length; i++){
-			var path = shortestPath(body, goldArray[i], mySnake.head);
-			if(goldPath === undefined) goldPath = path;
-			else{
-				if(path.length < goldPath.length){
-					goldPath = path;
-				}
-			}
-		}
-	}
-	
-	// strategy question: when should we prioritize gold over food?
-	// right now, do: if health is low (under 20), go for food. Else, go for gold.
 	var bestPath = foodPath;
-	if(goldPath){
-		if(mySnake.health > 20 && goldPath.length <= foodPath.length){
-			bestPath = goldPath;
-		}
-	}
-	
+
 	console.log(bestPath);
     console.log(mySnake.head);
 
@@ -155,9 +119,6 @@ router.post(config.routes.move, function (req, res) {
 
 // Handle POST request to '/end'
 router.post(config.routes.end, function (req, res) {
-  // Do something here to end your snake's session
-
-  // We don't need a response so just send back a 200
     res.status(200);
     res.end();
     return;
